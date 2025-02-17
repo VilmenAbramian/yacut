@@ -8,5 +8,5 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# В список импорта добавляем api_views:
-from . import yacut
+
+from . import api_views, error_handlers, yacut

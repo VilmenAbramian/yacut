@@ -6,22 +6,18 @@ from yacut import db
 from settings import USER_LINK_LIMIT, VALID_SYMBOLS
 
 
-
 class URLMap(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     original = db.Column(db.String(256), nullable=False)
     short = db.Column(db.String, nullable=False, unique=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    def to_dict(self):
-        ...
-
-    def from_dict(self, data):
-        ...
-
-    def get_unique_short_id(self, lenght=6):
+    @staticmethod
+    def get_unique_short_id(lenght=6):
         while True:
-            short_link = ''.join(random.choice(VALID_SYMBOLS) for _ in range(lenght))
+            short_link = ''.join(
+                random.choice(VALID_SYMBOLS) for _ in range(lenght)
+            )
             if not URLMap.query.filter_by(short=short_link).first():
                 return short_link
 

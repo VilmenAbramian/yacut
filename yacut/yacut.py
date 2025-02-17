@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from . import app, db
 from .forms import LinkForm
@@ -16,7 +16,7 @@ def index_view():
             custom_id = urlmap.get_unique_short_id()
         if URLMap.query.filter_by(short=custom_id).first():
             flash(
-                f'Имя {custom_id} уже занято!',
+                'Предложенный вариант короткой ссылки уже существует.',
                 'rejected'
             )
             return render_template('index.html', form=form)
@@ -33,7 +33,9 @@ def index_view():
         db.session.commit()
         flash(
             url_for(
-                'redirect_short_link', short_id=custom_id, _external=True), 'complete_link'
+                'redirect_short_link',
+                short_id=custom_id,
+                _external=True), 'complete_link'
         )
     return render_template('index.html', form=form)
 
