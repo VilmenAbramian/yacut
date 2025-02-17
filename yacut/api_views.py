@@ -7,11 +7,11 @@ from .error_handlers import InvalidAPIUsage
 from .models import URLMap
 
 
-@app.route('/api/id/', methods=('POST',))
+@app.route('/api/id/', methods=['POST'])
 def new_short_url():
     """Создание новой короткой ссылки"""
-    data = request.get_json()
-    if not data:
+    data = request.get_json(silent=True)
+    if data is None:
         raise InvalidAPIUsage('Отсутствует тело запроса')
     original_url = data.get('url')
     if original_url is None:

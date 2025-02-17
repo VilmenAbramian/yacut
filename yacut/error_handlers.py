@@ -21,16 +21,6 @@ def page_not_found(error):
     return render_template('404.html'), HTTPStatus.NOT_FOUND
 
 
-@app.errorhandler(415)
-def unsupported_media_type(error):
-    """Обработчик ошибки 415, возвращает JSON"""
-    response = jsonify(
-        {'message': 'Отсутствует тело запроса'}
-    )
-    response.status_code = 400
-    return response
-
-
 @app.errorhandler(InvalidAPIUsage)
 def api_exception(error):
     """Обработчик кастомных API-ошибок"""
