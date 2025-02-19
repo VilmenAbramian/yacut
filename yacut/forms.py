@@ -1,9 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, URLField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 
-from . import validators
-from settings import USER_LINK_LIMIT, VALID_SYMBOLS
+from settings import MAX_ORIGINAL_LENGTH, SHORT_PATTERN, USER_LINK_LIMIT
 
 
 class LinkForm(FlaskForm):
@@ -11,22 +10,19 @@ class LinkForm(FlaskForm):
         'Добавьте укорачиваемую ссылку',
         validators=[
             DataRequired(message='Обязательное поле'),
-            validators.URL(message='Некорректный URL'),
-            Length(1, 256)
+            URL(message='Некорректный URL'),
+            Length(1, MAX_ORIGINAL_LENGTH)
         ]
     )
     custom_id = URLField(
         'Добавьте свой вариант короткой ссылки',
         validators=(
-            validators.Optional(),
-            validators.Length(
+            Optional(),
+            Length(
                 max=USER_LINK_LIMIT,
                 message='Слишком длинная ссылка'
             ),
-            validators.AllOf(
-                values=VALID_SYMBOLS,
-                message='Разрешены только латиница и цифры'
-            )
+            Regexp(SHORT_PATTERN, message='Разрешены только латиница и цифры'),
         )
     )
     submit = SubmitField('Создать ссылку')

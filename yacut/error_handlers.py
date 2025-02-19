@@ -1,11 +1,12 @@
 from http import HTTPStatus
+
 from flask import jsonify, render_template
 
 from . import app
 
 
 class InvalidAPIUsage(Exception):
-    status_code = 400
+    status_code = HTTPStatus.BAD_REQUEST
 
     def __init__(self, message, status_code=HTTPStatus.BAD_REQUEST):
         super().__init__()
