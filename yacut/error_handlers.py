@@ -26,3 +26,8 @@ def page_not_found(error):
 def api_exception(error):
     """Обработчик кастомных API-ошибок"""
     return jsonify(error.to_dict()), error.status_code
+
+
+class ShortLinkGenerationError(Exception):
+    """Ошибка генерации уникального короткого идентификатора"""
+    pass

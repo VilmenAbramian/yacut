@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, URLField
 from wtforms.validators import DataRequired, Length, Optional, Regexp, URL
 
-from settings import MAX_ORIGINAL_LENGTH, SHORT_PATTERN, USER_LINK_LIMIT
+from settings import (MAX_ORIGINAL_LENGTH, MIN_ORIGINAL_LENGTH,
+                      SHORT_PATTERN, USER_LINK_LIMIT)
 
 
 class LinkForm(FlaskForm):
@@ -11,7 +12,7 @@ class LinkForm(FlaskForm):
         validators=[
             DataRequired(message='Обязательное поле'),
             URL(message='Некорректный URL'),
-            Length(1, MAX_ORIGINAL_LENGTH)
+            Length(MIN_ORIGINAL_LENGTH, MAX_ORIGINAL_LENGTH)
         ]
     )
     custom_id = URLField(

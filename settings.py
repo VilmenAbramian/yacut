@@ -15,6 +15,7 @@ SHORT_EXIST = 'Предложенный вариант короткой ссыл
 SHORT_NOT_FOUND = 'Указанный id не найден'
 GENERATION_FAIL = 'Не удалось сгенерировать короткую ссылку'
 MAX_ORIGINAL_LENGTH = 1024
+MIN_ORIGINAL_LENGTH = 1
 SHORT_LENGTH = 6
 MAX_ATTEMPTS = 50
 

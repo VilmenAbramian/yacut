@@ -3,6 +3,7 @@ from random import choices
 
 from flask import url_for
 
+from .error_handlers import ShortLinkGenerationError
 from yacut import db
 from settings import (BAD_SHORT, GENERATION_FAIL,
                       MAX_ATTEMPTS, MAX_ORIGINAL_LENGTH,
@@ -22,22 +23,21 @@ class URLMap(db.Model):
             short = ''.join(choices(VALID_SYMBOLS, k=SHORT_LENGTH))
             if not URLMap.get(short):
                 return short
-        raise RuntimeError(GENERATION_FAIL)
+        raise ShortLinkGenerationError(GENERATION_FAIL)
 
     @staticmethod
     def get(short):
         return URLMap.query.filter_by(short=short).first()
 
     @staticmethod
-    def create(original, short=None, validate=True):
-        if validate:
-            if short:
-                if ((len(short) > USER_LINK_LIMIT) or
-                        any(char not in VALID_SYMBOLS for char in short)):
-                    raise ValueError(BAD_SHORT)
-                if URLMap.get(short):
-                    raise ValueError(SHORT_EXIST)
-        if not short:
+    def create(original, short=None):
+        if short:
+            if ((len(short) > USER_LINK_LIMIT) or
+                    any(char not in VALID_SYMBOLS for char in short)):
+                raise ValueError(BAD_SHORT)
+            if URLMap.get(short):
+                raise ValueError(SHORT_EXIST)
+        else:
             short = URLMap.get_unique_short()
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
