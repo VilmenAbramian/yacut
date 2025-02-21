@@ -1,6 +1,7 @@
 from flask import flash, redirect, render_template
 
 from . import app
+from .error_handlers import ShortLinkGenerationError
 from .forms import LinkForm
 from .models import URLMap
 
@@ -19,7 +20,7 @@ def index_view():
                 short=form.custom_id.data,
             ).short_link()
         )
-    except (ValueError, RuntimeError) as error:
+    except (ValueError, ShortLinkGenerationError) as error:
         flash(str(error))
         return render_template('index.html', form=form)
 
